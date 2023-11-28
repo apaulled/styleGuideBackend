@@ -6,7 +6,6 @@ import com.styleguide.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -35,6 +34,18 @@ public class UserController {
         User user = userService.getUser(userId);
         System.out.println(user);
         return user;
+    }
+
+    @PostMapping(value = "/{userId}/clothing", produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String addNewClothingPiece(@PathVariable UUID userId) {
+        throw new RuntimeException("not implemented"); // TODO new clothing
+    }
+
+    @GetMapping(value = "/{userId}/outfit", produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getOutfit(@PathVariable UUID userId) {
+        throw new RuntimeException("not implemented"); // TODO get outfits
     }
 
     @GetMapping(value = "/test")
