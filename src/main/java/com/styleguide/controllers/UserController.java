@@ -11,7 +11,7 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/user")
 public class UserController {
     private final UserService userService;
     private final RabbitDispatch rabbitDispatch;
