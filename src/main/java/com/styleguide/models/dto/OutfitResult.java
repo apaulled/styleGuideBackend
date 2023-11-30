@@ -1,4 +1,4 @@
-package com.styleguide.models;
+package com.styleguide.models.dto;
 
 import java.util.UUID;
 

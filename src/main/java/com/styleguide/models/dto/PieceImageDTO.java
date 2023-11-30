@@ -1,4 +1,7 @@
-package com.styleguide.models;
+package com.styleguide.models.dto;
+
+import com.styleguide.models.enums.ClothingType;
+import com.styleguide.models.enums.Color;
 
 import java.io.Serializable;
 import java.util.UUID;

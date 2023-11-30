@@ -1,4 +1,4 @@
-package com.styleguide.models;
+package com.styleguide.models.enums;
 
 public enum ClothingType {
     HEAD_WEAR,

@@ -1,9 +1,8 @@
 package com.styleguide.services;
 
-import com.styleguide.models.ClothingType;
-import com.styleguide.models.Color;
+import com.styleguide.models.enums.ClothingType;
 import com.styleguide.models.Piece;
-import com.styleguide.models.UserCloset;
+import com.styleguide.models.dto.UserCloset;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

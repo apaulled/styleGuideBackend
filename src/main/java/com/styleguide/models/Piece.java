@@ -1,14 +1,15 @@
 package com.styleguide.models;
 
 
+import com.styleguide.models.dto.PieceImageDTO;
+import com.styleguide.models.enums.ClothingType;
+import com.styleguide.models.enums.Color;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;

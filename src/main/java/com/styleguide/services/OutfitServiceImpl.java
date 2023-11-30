@@ -1,9 +1,8 @@
 package com.styleguide.services;
 
-import com.styleguide.RabbitDispatch;
-import com.styleguide.models.Color;
-import com.styleguide.models.ColorOutfitRequest;
-import com.styleguide.models.UserCloset;
+import com.styleguide.models.enums.Color;
+import com.styleguide.models.dto.ColorOutfitRequest;
+import com.styleguide.models.dto.UserCloset;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

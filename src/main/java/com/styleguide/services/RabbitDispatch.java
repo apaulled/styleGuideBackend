@@ -1,14 +1,11 @@
-package com.styleguide;
+package com.styleguide.services;
 
-import com.styleguide.models.Color;
-import com.styleguide.models.ColorOutfitRequest;
+import com.styleguide.models.dto.ColorOutfitRequest;
 import com.styleguide.models.Piece;
-import com.styleguide.models.PieceImageDTO;
+import com.styleguide.models.dto.PieceImageDTO;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class RabbitDispatch {

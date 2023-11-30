@@ -1,6 +1,6 @@
 package com.styleguide.repositories;
 
-import com.styleguide.models.ClothingType;
+import com.styleguide.models.enums.ClothingType;
 import com.styleguide.models.Piece;
 import com.styleguide.models.User;
 import org.springframework.data.repository.CrudRepository;

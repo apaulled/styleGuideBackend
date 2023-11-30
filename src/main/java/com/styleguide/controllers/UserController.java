@@ -1,11 +1,10 @@
 package com.styleguide.controllers;
 
-import com.styleguide.RabbitDispatch;
-import com.styleguide.models.ClothingType;
-import com.styleguide.models.Color;
+import com.styleguide.services.RabbitDispatch;
+import com.styleguide.models.enums.ClothingType;
+import com.styleguide.models.enums.Color;
 import com.styleguide.models.User;
 import com.styleguide.services.OutfitService;
-import com.styleguide.services.OutfitServiceImpl;
 import com.styleguide.services.PieceService;
 import com.styleguide.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

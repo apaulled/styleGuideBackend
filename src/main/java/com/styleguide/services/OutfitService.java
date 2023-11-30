@@ -1,6 +1,6 @@
 package com.styleguide.services;
 
-import com.styleguide.models.Color;
+import com.styleguide.models.enums.Color;
 
 import java.util.UUID;
 

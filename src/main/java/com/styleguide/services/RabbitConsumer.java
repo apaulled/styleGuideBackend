@@ -1,6 +1,8 @@
-package com.styleguide;
+package com.styleguide.services;
 
 import com.styleguide.models.*;
+import com.styleguide.models.dto.OutfitResult;
+import com.styleguide.models.dto.PieceColor;
 import com.styleguide.repositories.OutfitRepository;
 import com.styleguide.repositories.PieceRepository;
 import com.styleguide.repositories.UserRepository;

@@ -1,7 +1,8 @@
 package com.styleguide.services;
 
-import com.styleguide.RabbitDispatch;
 import com.styleguide.models.*;
+import com.styleguide.models.dto.UserCloset;
+import com.styleguide.models.enums.ClothingType;
 import com.styleguide.repositories.PieceRepository;
 import com.styleguide.repositories.UserPieceRepository;
 import com.styleguide.repositories.UserRepository;
