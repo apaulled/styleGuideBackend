@@ -12,6 +12,8 @@ public interface PieceService {
 
     String uploadPiece(MultipartFile file) throws IOException;
 
-    byte[] getPieceImage(UUID uuid);
+    String uploadPieceForUser(MultipartFile file, UUID userId) throws IOException;
+
+    // byte[] getPieceImage(UUID uuid);
 
 }

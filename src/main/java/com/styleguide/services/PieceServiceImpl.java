@@ -1,19 +1,19 @@
 package com.styleguide.services;
 
-import com.styleguide.ImageUtil;
 import com.styleguide.RabbitDispatch;
 import com.styleguide.models.Piece;
+import com.styleguide.models.User;
 import com.styleguide.repositories.PieceRepository;
+import com.styleguide.repositories.UserPieceRepository;
+import com.styleguide.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Service
@@ -21,18 +21,21 @@ public class PieceServiceImpl implements PieceService {
 
     private final PieceRepository pieceRepository;
     private final RabbitDispatch rabbitDispatch;
+    private final UserPieceRepository userPieceRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PieceServiceImpl(PieceRepository pieceRepository, RabbitDispatch rabbitDispatch) {
+    public PieceServiceImpl(PieceRepository pieceRepository, RabbitDispatch rabbitDispatch,
+                            UserPieceRepository userPieceRepository, UserRepository userRepository) {
         this.pieceRepository = pieceRepository;
         this.rabbitDispatch = rabbitDispatch;
+        this.userPieceRepository = userPieceRepository;
+        this.userRepository = userRepository;
     }
 
     public String uploadPiece(MultipartFile file) throws IOException {
-        byte[] stuff = ImageUtil.compressImage(file.getBytes());
-        //System.out.println(stuff);
-        //System.out.println(Arrays.toString(stuff));
-        Piece piece = new Piece(file.getOriginalFilename(), stuff);
+        //byte[] stuff = ImageUtil.compressImage(file.getBytes());
+        Piece piece = new Piece(file.getOriginalFilename());
         pieceRepository.save(piece);
 
         // I know this is bad lol, doing it for time purposes
@@ -43,7 +46,29 @@ public class PieceServiceImpl implements PieceService {
         }
 
         piece.setUrl("/Users/paulgagliano/Desktop/styleguide/" + piece.getId().toString() + ".png");
+        pieceRepository.save(piece);
 
+        rabbitDispatch.sendImageToProcessor(piece);
+
+        return "YUH!!";
+    }
+
+    public String uploadPieceForUser(MultipartFile file, UUID userId) throws IOException {
+        //byte[] stuff = ImageUtil.compressImage(file.getBytes());
+        Piece piece = new Piece(file.getOriginalFilename());
+
+        User user = userRepository.findById(userId).orElseThrow();
+        piece.setUser(user);
+        pieceRepository.save(piece);
+
+        // I know this is bad lol, doing it for time purposes
+        File realFile = new File("/Users/paulgagliano/Desktop/styleguide/" + piece.getId().toString() + ".png");
+
+        try (OutputStream os = new FileOutputStream(realFile)) {
+            os.write(file.getBytes());
+        }
+
+        piece.setUrl("/Users/paulgagliano/Desktop/styleguide/" + piece.getId().toString() + ".png");
         pieceRepository.save(piece);
 
         rabbitDispatch.sendImageToProcessor(piece);
@@ -56,15 +81,14 @@ public class PieceServiceImpl implements PieceService {
 
         return Piece.builder()
                 .name(piece.getName())
-                .imageData(ImageUtil.decompressImage(piece.getImageData()))
                 .primaryColor(piece.getPrimaryColor())
                 .secondaryColor(piece.getSecondaryColor())
                 .createdAt(piece.getCreatedAt()).build();
     }
 
-    @Transactional
+    /*@Transactional
     public byte[] getPieceImage(UUID uuid) {
         Piece piece = pieceRepository.findById(uuid).orElseThrow();
         return ImageUtil.decompressImage(piece.getImageData());
-    }
+    }*/
 }

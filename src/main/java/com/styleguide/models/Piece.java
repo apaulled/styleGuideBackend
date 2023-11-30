@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
@@ -28,15 +30,16 @@ public class Piece {
     @Column(name = "name")
     private String name;
 
-    //@Lob
-    @Column(name = "image_data", length = 1000)
-    private byte[] imageData;
-
     @Column(name = "primary_color")
-    private String primaryColor;
+    @Enumerated(EnumType.STRING)
+    private Color primaryColor;
 
     @Column(name = "secondary_color")
-    private String secondaryColor;
+    @Enumerated(EnumType.STRING)
+    private Color secondaryColor;
+
+    @Column(name = "average_color")
+    private String averageColor;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
@@ -45,25 +48,33 @@ public class Piece {
     @Column(name = "url")
     private String url;
 
-    public Piece(String name, byte[] imageData) {
+    @Column(name = "clothing_type")
+    @Enumerated(EnumType.STRING)
+    private ClothingType clothingType;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Piece(String name) {
         this.name = name;
-        this.imageData = imageData;
+        //this.imageData = imageData;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public byte[] getImageData() {
-        return imageData;
-    }
-
-    public String getPrimaryColor() {
+    public Color getPrimaryColor() {
         return primaryColor;
     }
 
-    public String getSecondaryColor() {
+    public Color getSecondaryColor() {
         return secondaryColor;
+    }
+
+    public String getAverageColor() {
+        return averageColor;
     }
 
     public Instant getCreatedAt() {
@@ -84,5 +95,33 @@ public class Piece {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public ClothingType getClothingType() {
+        return clothingType;
+    }
+
+    public void setClothingType(ClothingType clothingType) {
+        this.clothingType = clothingType;
+    }
+
+    public void setPrimaryColor(Color primaryColor) {
+        this.primaryColor = primaryColor;
+    }
+
+    public void setSecondaryColor(Color secondaryColor) {
+        this.secondaryColor = secondaryColor;
+    }
+
+    public void setAverageColor(String averageColor) {
+        this.averageColor = averageColor;
     }
 }

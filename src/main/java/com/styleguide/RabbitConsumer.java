@@ -1,9 +1,9 @@
 package com.styleguide;
 
+import com.styleguide.models.Color;
 import com.styleguide.models.Piece;
 import com.styleguide.models.PieceColor;
 import com.styleguide.repositories.PieceRepository;
-import com.styleguide.services.PieceService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -22,10 +22,15 @@ public class RabbitConsumer {
     }
 
     @RabbitListener(queues = "colors")
-    public void consumeGoogleFetch(@Payload PieceColor response){
+    public void consumeColorResponse(@Payload PieceColor response){
         Piece piece = pieceRepository.findById(response.id()).orElseThrow();
-        List<Integer> color = response.color();
-        piece.setPrimaryColor("(" + color.get(0).toString() + "," + color.get(1).toString() + "," + color.get(2).toString() + ")");
+
+        piece.setPrimaryColor(response.primaryColor());
+        piece.setSecondaryColor(response.secondaryColor());
+
+        List<Integer> averageColor = response.averageColor();
+        piece.setAverageColor(averageColor.get(0).toString() + "," + averageColor.get(1).toString() + "," + averageColor.get(2).toString());
+
         pieceRepository.save(piece);
     }
 
