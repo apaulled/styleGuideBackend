@@ -42,6 +42,9 @@ public class Piece {
     @CreationTimestamp
     private Instant createdAt;
 
+    @Column(name = "url")
+    private String url;
+
     public Piece(String name, byte[] imageData) {
         this.name = name;
         this.imageData = imageData;
@@ -65,5 +68,21 @@ public class Piece {
 
     public Instant getCreatedAt() {
         return createdAt;
+    }
+
+    public PieceImageDTO toDto() {
+        return new PieceImageDTO(id, url);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -1,6 +1,7 @@
 package com.styleguide.services;
 
 import com.styleguide.ImageUtil;
+import com.styleguide.RabbitDispatch;
 import com.styleguide.models.Piece;
 import com.styleguide.repositories.PieceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,28 +9,44 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class PieceServiceImpl implements PieceService {
 
     private final PieceRepository pieceRepository;
+    private final RabbitDispatch rabbitDispatch;
 
     @Autowired
-    public PieceServiceImpl(PieceRepository pieceRepository) {
+    public PieceServiceImpl(PieceRepository pieceRepository, RabbitDispatch rabbitDispatch) {
         this.pieceRepository = pieceRepository;
+        this.rabbitDispatch = rabbitDispatch;
     }
 
     public String uploadPiece(MultipartFile file) throws IOException {
         byte[] stuff = ImageUtil.compressImage(file.getBytes());
-        System.out.println(stuff);
-        System.out.println(Arrays.toString(stuff));
+        //System.out.println(stuff);
+        //System.out.println(Arrays.toString(stuff));
         Piece piece = new Piece(file.getOriginalFilename(), stuff);
+        pieceRepository.save(piece);
+
+        // I know this is bad lol, doing it for time purposes
+        File realFile = new File("/Users/paulgagliano/Desktop/styleguide/" + piece.getId().toString() + ".png");
+
+        try (OutputStream os = new FileOutputStream(realFile)) {
+            os.write(file.getBytes());
+        }
+
+        piece.setUrl("/Users/paulgagliano/Desktop/styleguide/" + piece.getId().toString() + ".png");
 
         pieceRepository.save(piece);
+
+        rabbitDispatch.sendImageToProcessor(piece);
 
         return "YUH!!";
     }

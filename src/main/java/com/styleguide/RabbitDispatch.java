@@ -1,5 +1,7 @@
 package com.styleguide;
 
+import com.styleguide.models.Piece;
+import com.styleguide.models.PieceImageDTO;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,13 @@ public class RabbitDispatch {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+    public void sendImageToProcessor(Piece piece) {
+        PieceImageDTO dto = piece.toDto();
+        rabbitTemplate.convertAndSend("pieces", dto);
+    }
+
     public void dispatchTest() {
-        rabbitTemplate.convertAndSend("hello", "yuh");
+        rabbitTemplate.convertAndSend("pieces", "yuh");
     }
 
 }
