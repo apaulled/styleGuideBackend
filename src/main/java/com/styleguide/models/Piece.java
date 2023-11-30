@@ -15,7 +15,9 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "pieces")
+@Table(name = "pieces", indexes = {
+        @Index(name = "pieces_clothing_type_ndx", columnList = "clothing_type"),
+})
 @Data
 @Builder
 @NoArgsConstructor
@@ -82,7 +84,7 @@ public class Piece {
     }
 
     public PieceImageDTO toDto() {
-        return new PieceImageDTO(id, url);
+        return new PieceImageDTO(id, url, primaryColor, secondaryColor, averageColor, clothingType);
     }
 
     public String getName() {

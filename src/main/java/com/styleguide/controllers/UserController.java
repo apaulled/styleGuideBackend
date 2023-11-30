@@ -1,7 +1,11 @@
 package com.styleguide.controllers;
 
 import com.styleguide.RabbitDispatch;
+import com.styleguide.models.ClothingType;
+import com.styleguide.models.Color;
 import com.styleguide.models.User;
+import com.styleguide.services.OutfitService;
+import com.styleguide.services.OutfitServiceImpl;
 import com.styleguide.services.PieceService;
 import com.styleguide.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +25,15 @@ public class UserController {
     private final UserService userService;
     private final RabbitDispatch rabbitDispatch;
     private final PieceService pieceService;
+    private final OutfitService outfitService;
 
     @Autowired
     public UserController(UserService userService, RabbitDispatch rabbitDispatch,
-                          PieceService pieceService) {
+                          PieceService pieceService, OutfitService outfitService) {
         this.userService = userService;
         this.rabbitDispatch = rabbitDispatch;
         this.pieceService = pieceService;
+        this.outfitService = outfitService;
     }
 
     @GetMapping(value = "", produces = APPLICATION_JSON_VALUE)
@@ -46,17 +52,20 @@ public class UserController {
 
     @PostMapping(value = "/{userId}/piece")
     public ResponseEntity<?> uploadPieceForUser(@PathVariable UUID userId,
-                                                @RequestParam("image") MultipartFile file) throws IOException {
-        String response = pieceService.uploadPieceForUser(file, userId);
+                                                @RequestParam("image") MultipartFile file,
+                                                @RequestParam("clothing_type") ClothingType type) throws IOException {
+        String response = pieceService.uploadPieceForUser(file, userId, type);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }
 
-    @GetMapping(value = "/{userId}/outfit", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{userId}/color-outfit", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getOutfit(@PathVariable UUID userId) {
-        throw new RuntimeException("not implemented"); // TODO get outfits
+    public String requestColorOutfit(@PathVariable UUID userId,
+                                 @RequestParam Color color) {
+        outfitService.requestColorOutfit(userId, color);
+        return "mmmmm outfits";
     }
 
     @GetMapping(value = "/test")

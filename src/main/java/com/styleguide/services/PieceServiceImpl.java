@@ -1,8 +1,7 @@
 package com.styleguide.services;
 
 import com.styleguide.RabbitDispatch;
-import com.styleguide.models.Piece;
-import com.styleguide.models.User;
+import com.styleguide.models.*;
 import com.styleguide.repositories.PieceRepository;
 import com.styleguide.repositories.UserPieceRepository;
 import com.styleguide.repositories.UserRepository;
@@ -53,9 +52,10 @@ public class PieceServiceImpl implements PieceService {
         return "YUH!!";
     }
 
-    public String uploadPieceForUser(MultipartFile file, UUID userId) throws IOException {
+    public String uploadPieceForUser(MultipartFile file, UUID userId, ClothingType type) throws IOException {
         //byte[] stuff = ImageUtil.compressImage(file.getBytes());
         Piece piece = new Piece(file.getOriginalFilename());
+        piece.setClothingType(type);
 
         User user = userRepository.findById(userId).orElseThrow();
         piece.setUser(user);
@@ -84,6 +84,31 @@ public class PieceServiceImpl implements PieceService {
                 .primaryColor(piece.getPrimaryColor())
                 .secondaryColor(piece.getSecondaryColor())
                 .createdAt(piece.getCreatedAt()).build();
+    }
+
+    public UserCloset getCloset(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        return new UserCloset(
+                userId,
+                pieceRepository.findAllByUserAndClothingType(
+                        user, ClothingType.HEAD_WEAR)
+                        .stream().map(Piece::toDto).toList(),
+                pieceRepository.findAllByUserAndClothingType(
+                        user, ClothingType.TOP)
+                        .stream().map(Piece::toDto).toList(),
+                pieceRepository.findAllByUserAndClothingType(
+                                user, ClothingType.BOTTOM)
+                        .stream().map(Piece::toDto).toList(),
+                pieceRepository.findAllByUserAndClothingType(
+                                user, ClothingType.SHOE)
+                        .stream().map(Piece::toDto).toList(),
+                pieceRepository.findAllByUserAndClothingType(
+                                user, ClothingType.OUTER_WEAR)
+                        .stream().map(Piece::toDto).toList(),
+                pieceRepository.findAllByUserAndClothingType(
+                                user, ClothingType.ACCESSORY)
+                        .stream().map(Piece::toDto).toList()
+                );
     }
 
     /*@Transactional
