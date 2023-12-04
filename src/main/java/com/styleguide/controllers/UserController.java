@@ -70,10 +70,10 @@ public class UserController {
                 .body(response);
     }
 
-    @GetMapping(value = "/{userId}/color-outfit", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{userId}/color-outfit", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public String requestColorOutfit(@PathVariable UUID userId,
-                                 @RequestParam Color color) {
+                                     @RequestParam Color color) {
         outfitService.requestColorOutfit(userId, color);
         return "mmmmm outfits";
     }

@@ -4,7 +4,6 @@ import com.styleguide.models.*;
 import com.styleguide.models.dto.UserCloset;
 import com.styleguide.models.enums.ClothingType;
 import com.styleguide.repositories.PieceRepository;
-import com.styleguide.repositories.UserPieceRepository;
 import com.styleguide.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,15 +20,13 @@ public class PieceServiceImpl implements PieceService {
 
     private final PieceRepository pieceRepository;
     private final RabbitDispatch rabbitDispatch;
-    private final UserPieceRepository userPieceRepository;
     private final UserRepository userRepository;
 
     @Autowired
     public PieceServiceImpl(PieceRepository pieceRepository, RabbitDispatch rabbitDispatch,
-                            UserPieceRepository userPieceRepository, UserRepository userRepository) {
+                            UserRepository userRepository) {
         this.pieceRepository = pieceRepository;
         this.rabbitDispatch = rabbitDispatch;
-        this.userPieceRepository = userPieceRepository;
         this.userRepository = userRepository;
     }
 

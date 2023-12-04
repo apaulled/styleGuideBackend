@@ -40,6 +40,7 @@ public class RabbitConsumer {
                 pieceRepository.findById(response.shoe()).orElseThrow(),
                 pieceRepository.findById(response.outerWear()).orElseThrow(),
                 pieceRepository.findById(response.accessory()).orElseThrow());
+        System.out.println(outfit);
         outfitRepository.save(outfit);
     }
 

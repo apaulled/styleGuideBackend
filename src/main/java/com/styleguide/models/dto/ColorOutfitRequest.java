@@ -5,6 +5,6 @@ import com.styleguide.models.enums.Color;
 import java.util.UUID;
 
 public record ColorOutfitRequest(UUID userId,
-                                 Color primaryColor,
+                                 Color color,
                                  UserCloset userCloset) {
 }
