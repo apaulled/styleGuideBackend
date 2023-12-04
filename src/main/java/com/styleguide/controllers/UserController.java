@@ -1,5 +1,8 @@
 package com.styleguide.controllers;
 
+import com.styleguide.models.dto.OutfitBoard;
+import com.styleguide.models.dto.UserCloset;
+import com.styleguide.models.dto.UserResponse;
 import com.styleguide.services.RabbitDispatch;
 import com.styleguide.models.enums.ClothingType;
 import com.styleguide.models.enums.Color;
@@ -43,16 +46,24 @@ public class UserController {
 
     @GetMapping(value = "/{userId}", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public User getById(@PathVariable UUID userId) {
-        User user = userService.getUser(userId);
-        System.out.println(user);
-        return user;
+    public UserResponse getById(@PathVariable UUID userId) {
+        return userService.getUser(userId);
+    }
+
+    @GetMapping(value = "/{userId}/closet", produces = APPLICATION_JSON_VALUE)
+    public UserCloset getUserCloset(@PathVariable UUID userId) {
+        return userService.getUserCloset(userId);
+    }
+
+    @GetMapping(value = "{userId}/outfits", produces = APPLICATION_JSON_VALUE)
+    public OutfitBoard getUserOutfits(@PathVariable UUID userId) {
+        return userService.getOutfitsForUser(userId);
     }
 
     @PostMapping(value = "/{userId}/piece")
     public ResponseEntity<?> uploadPieceForUser(@PathVariable UUID userId,
                                                 @RequestParam("image") MultipartFile file,
-                                                @RequestParam("clothing_type") ClothingType type) throws IOException {
+                                                @RequestParam("clothingType") ClothingType type) throws IOException {
         String response = pieceService.uploadPieceForUser(file, userId, type);
 
         return ResponseEntity.status(HttpStatus.OK)

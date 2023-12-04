@@ -1,13 +1,19 @@
 package com.styleguide.services;
 
 import com.styleguide.models.User;
+import com.styleguide.models.dto.OutfitBoard;
+import com.styleguide.models.dto.UserCloset;
+import com.styleguide.models.dto.UserResponse;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
 
-    User getUser(UUID id);
+    UserResponse getUser(UUID id);
+
+    OutfitBoard getOutfitsForUser(UUID id);
+
+    UserCloset getUserCloset(UUID id);
 
     Iterable<User> findAll();
 

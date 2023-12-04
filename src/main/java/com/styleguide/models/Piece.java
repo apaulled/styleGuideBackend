@@ -127,4 +127,5 @@ public class Piece {
     public void setAverageColor(String averageColor) {
         this.averageColor = averageColor;
     }
+
 }
