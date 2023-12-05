@@ -55,7 +55,7 @@ public class UserController {
         return userService.getUserCloset(userId);
     }
 
-    @GetMapping(value = "{userId}/outfits", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{userId}/outfits", produces = APPLICATION_JSON_VALUE)
     public OutfitBoard getUserOutfits(@PathVariable UUID userId) {
         return userService.getOutfitsForUser(userId);
     }
