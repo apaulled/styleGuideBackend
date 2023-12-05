@@ -44,6 +44,18 @@ public class UserController {
         return userService.findAll();
     }
 
+    @GetMapping(value = "/login", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> login(@RequestParam("username") String username, @RequestParam("password") String password) {
+        UserResponse response = userService.login(username, password);
+        if (response == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping(value = "/register", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> register(@RequestParam("username") String username, @RequestParam("password") String password) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.register(username, password));
+    }
+
     @GetMapping(value = "/{userId}", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public UserResponse getById(@PathVariable UUID userId) {

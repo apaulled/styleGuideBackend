@@ -24,6 +24,9 @@ public class User {
     @CreationTimestamp
     private Instant createdAt;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
     // @OneToMany(mappedBy = "users")
     // private List<UserPiece> pieces;
 
@@ -43,4 +46,12 @@ public class User {
         return createdAt;
     }
 
+    protected User() {
+
+    }
+
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 }

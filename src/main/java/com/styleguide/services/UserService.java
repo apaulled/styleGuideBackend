@@ -17,4 +17,8 @@ public interface UserService {
 
     Iterable<User> findAll();
 
+    UserResponse login(String username, String password);
+
+    UserResponse register(String username, String password);
+
 }
