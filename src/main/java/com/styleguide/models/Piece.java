@@ -13,7 +13,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "pieces", indexes = {
@@ -85,7 +87,13 @@ public class Piece {
     }
 
     public PieceImageDTO toDto() {
-        return new PieceImageDTO(id, url, primaryColor, secondaryColor, averageColor, clothingType);
+        return new PieceImageDTO(
+                id,
+                url,
+                primaryColor,
+                secondaryColor,
+                averageColor != null ? Stream.of(averageColor.split(",")).map(Integer::valueOf).toList() : null,
+                clothingType);
     }
 
     public String getName() {

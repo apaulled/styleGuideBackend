@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,6 +22,7 @@ public class PieceServiceImpl implements PieceService {
     private final PieceRepository pieceRepository;
     private final RabbitDispatch rabbitDispatch;
     private final UserRepository userRepository;
+    private static final String imageUrl = "/Users/paulgagliano/Desktop/styleguide/";
 
     @Autowired
     public PieceServiceImpl(PieceRepository pieceRepository, RabbitDispatch rabbitDispatch,
@@ -36,13 +38,13 @@ public class PieceServiceImpl implements PieceService {
         pieceRepository.save(piece);
 
         // I know this is bad lol, doing it for time purposes
-        File realFile = new File("/Users/paulgagliano/Desktop/styleguide/" + piece.getId().toString() + ".png");
+        File realFile = new File(imageUrl + piece.getId().toString() + ".png");
 
         try (OutputStream os = new FileOutputStream(realFile)) {
             os.write(file.getBytes());
         }
 
-        piece.setUrl("/Users/paulgagliano/Desktop/styleguide/" + piece.getId().toString() + ".png");
+        piece.setUrl(imageUrl + piece.getId().toString() + ".png");
         pieceRepository.save(piece);
 
         rabbitDispatch.sendImageToProcessor(piece);
@@ -60,18 +62,26 @@ public class PieceServiceImpl implements PieceService {
         pieceRepository.save(piece);
 
         // I know this is bad lol, doing it for time purposes
-        File realFile = new File("/Users/paulgagliano/Desktop/styleguide/" + piece.getId().toString() + ".png");
+        File realFile = new File(imageUrl + piece.getId().toString() + ".png");
 
         try (OutputStream os = new FileOutputStream(realFile)) {
             os.write(file.getBytes());
         }
 
-        piece.setUrl("/Users/paulgagliano/Desktop/styleguide/" + piece.getId().toString() + ".png");
+        piece.setUrl(imageUrl + piece.getId().toString() + ".png");
         pieceRepository.save(piece);
 
         rabbitDispatch.sendImageToProcessor(piece);
 
         return "YUH!!";
+    }
+
+    @Override
+    public String uploadPiecesForUser(List<MultipartFile> files, UUID userId, List<ClothingType> types) throws IOException {
+        for (int i = 0; i < files.size(); i++) {
+            uploadPieceForUser(files.get(i), userId, types.get(i));
+        }
+        return "YUHHHHHHH";
     }
 
     public Piece getPiece(UUID id) {

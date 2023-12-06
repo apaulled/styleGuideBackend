@@ -3,6 +3,7 @@ package com.styleguide.services;
 import com.styleguide.models.dto.ColorOutfitRequest;
 import com.styleguide.models.Piece;
 import com.styleguide.models.dto.PieceImageDTO;
+import com.styleguide.models.dto.ThemeOutfitRequest;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,10 @@ public class RabbitDispatch {
     }
 
     public void colorOutfitRequest(ColorOutfitRequest request) {
+        rabbitTemplate.convertAndSend("outfit_requests", request);
+    }
+
+    public void themeOutfitRequest(ThemeOutfitRequest request) {
         rabbitTemplate.convertAndSend("outfit_requests", request);
     }
 

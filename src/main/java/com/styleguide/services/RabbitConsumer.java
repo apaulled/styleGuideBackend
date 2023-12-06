@@ -1,6 +1,7 @@
 package com.styleguide.services;
 
 import com.styleguide.models.*;
+import com.styleguide.models.dto.OutfitDto;
 import com.styleguide.models.dto.OutfitResult;
 import com.styleguide.models.dto.PieceColor;
 import com.styleguide.repositories.OutfitRepository;
@@ -32,16 +33,18 @@ public class RabbitConsumer {
     @RabbitListener(queues = "outfit_results")
     public void consumeOutfitResponse(@Payload OutfitResult response) {
         User user = userRepository.findById(response.userId()).orElseThrow();
-        Outfit outfit = new Outfit(
-                user,
-                pieceRepository.findById(response.headWear()).orElseThrow(),
-                pieceRepository.findById(response.top()).orElseThrow(),
-                pieceRepository.findById(response.bottom()).orElseThrow(),
-                pieceRepository.findById(response.shoe()).orElseThrow(),
-                pieceRepository.findById(response.outerWear()).orElseThrow(),
-                pieceRepository.findById(response.accessory()).orElseThrow());
-        System.out.println(outfit);
-        outfitRepository.save(outfit);
+        response.outfits().forEach((outfitDto -> {
+            Outfit outfit = new Outfit(
+                    user,
+                    pieceRepository.findById(outfitDto.headWear()).orElseThrow(),
+                    pieceRepository.findById(outfitDto.top()).orElseThrow(),
+                    pieceRepository.findById(outfitDto.bottom()).orElseThrow(),
+                    pieceRepository.findById(outfitDto.shoe()).orElseThrow(),
+                    pieceRepository.findById(outfitDto.outerWear()).orElseThrow(),
+                    pieceRepository.findById(outfitDto.accessory()).orElseThrow());
+            System.out.println(outfit);
+            outfitRepository.save(outfit);
+        }));
     }
 
     @RabbitListener(queues = "colors")

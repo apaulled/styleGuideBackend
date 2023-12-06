@@ -3,6 +3,7 @@ package com.styleguide.controllers;
 import com.styleguide.models.dto.OutfitBoard;
 import com.styleguide.models.dto.UserCloset;
 import com.styleguide.models.dto.UserResponse;
+import com.styleguide.models.enums.Theme;
 import com.styleguide.services.RabbitDispatch;
 import com.styleguide.models.enums.ClothingType;
 import com.styleguide.models.enums.Color;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -82,12 +84,30 @@ public class UserController {
                 .body(response);
     }
 
+    @PostMapping(value = "/{userId}/pieces")
+    public ResponseEntity<?> uploadPiecesForUser(@PathVariable UUID userId,
+                                                 @RequestParam("images") List<MultipartFile> files,
+                                                 @RequestParam("clothingType") List<ClothingType> types) throws IOException {
+        String response = pieceService.uploadPiecesForUser(files, userId, types);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(response);
+    }
+
     @PostMapping(value = "/{userId}/color-outfit", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public String requestColorOutfit(@PathVariable UUID userId,
                                      @RequestParam Color color) {
         outfitService.requestColorOutfit(userId, color);
         return "mmmmm outfits";
+    }
+
+    @PostMapping(value = "/{userId}/theme-outfit", produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String requestThemeOutfit(@PathVariable UUID userId,
+                                     @RequestParam Theme theme) {
+        outfitService.requestThemeOutfit(userId, theme);
+        return "mmmmm outfits slay";
     }
 
     @GetMapping(value = "/test")
